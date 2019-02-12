@@ -1,0 +1,23 @@
+version: '3.3'
+
+services:
+  db:
+    image: mysql:5.7
+    volumes:
+    - ./docker/dump/:/docker-entrypoint-initdb.d/
+    environment:
+    - MYSQL_DATABASE=magento
+    - MYSQL_USER=magento_user
+    - MYSQL_PASSWORD=secret
+    - MYSQL_ROOT_PASSWORD=secret
+    ports:
+    - 3306:3306
+  local:
+    build: ./docker
+    ports:
+    - 80:80
+    links:
+    - db:db
+    working_dir: /var/www/html
+    volumes:
+    - ./src:/var/www/html
